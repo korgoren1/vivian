@@ -1,339 +1,565 @@
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Project_Vivian // Confidential System</title>
+<title>Vivian ↔ Ezra — Private Tribute</title>
 <meta name="author" content="Ezra">
 <style>
-  /* --- Reset & base --- */
-  *{box-sizing:border-box;margin:0;padding:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace}
-  html,body{height:100%;background:#05060a;color:#aef7e0;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  :root{
-    --bg:#05060a;
-    --accent:#00e6b8;
-    --muted:#77a89a33;
-    --panel:#071018;
-    --glass: rgba(255,255,255,0.02);
-  }
+:root{
+  --bg-1:#04040a;
+  --bg-2:#0b0b14;
+  --card: rgba(255,255,255,0.03);
+  --muted: #9aa7b3;
+  --accent: #8f63ff; /* purple */
+  --accent2: #00e6cf; /* cyan */
+  --text: #eaf6f5;
+  --glass: rgba(255,255,255,0.03);
+  --radius: 14px;
+  --maxw: 1100px;
+}
+/* reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:
+  radial-gradient(900px 400px at 10% 10%, rgba(143,99,255,0.03), transparent 8%),
+  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; -webkit-font-smoothing:antialiased}
+a{color:inherit}
+.container{max-width:var(--maxw);margin:0 auto;padding:28px}
 
-  /* --- Layout: login stage (center) --- */
-  .stage {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:
-    radial-gradient(900px 400px at 10% 10%, rgba(0,230,184,0.02), transparent 10%),
-    linear-gradient(180deg,#020406 0%,#05060a 100%);overflow:hidden}
-  .card {width:92%;max-width:760px;padding:26px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(0,230,184,0.06);box-shadow:0 18px 60px rgba(0,0,0,0.65);backdrop-filter: blur(6px)}
-  h1{color:var(--accent);font-size:1.2rem;margin-bottom:8px}
-  p.lead{color:#d7f7ee;margin-bottom:14px;font-size:0.95rem}
+/* NAV */
+nav {
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 28px;background:transparent;
+}
+.brand {font-weight:800;color:var(--accent);letter-spacing:0.6px}
+.nav-actions {display:flex;gap:10px;align-items:center}
+.nav-actions button{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer}
+.nav-actions button:hover{color:var(--text);border-color:rgba(143,99,255,0.12)}
 
-  .inputs {display:flex;gap:10px;flex-wrap:wrap}
-  input[type="text"], input[type="password"]{
-    flex:1;padding:10px 12px;border-radius:8px;background:transparent;border:1px solid rgba(174,247,224,0.08);color:#dffbf0;min-width:170px;
-    transition:box-shadow .16s, transform .12s;
-  }
-  input:focus{outline:none;box-shadow:0 10px 30px rgba(0,230,184,0.06);transform:translateY(-2px)}
-  button.primary {
-    margin-top:12px;padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(90deg,#00ffcc,#66ffe0);color:#021013;font-weight:700;cursor:pointer;
-    box-shadow:0 10px 28px rgba(0,230,184,0.08);transition:transform .12s;
-  }
-  button.primary:hover{transform:translateY(-3px)}
-  .hint{font-size:0.85rem;color:#9fe9d1;margin-top:10px}
+/* LOGIN STAGE */
+#loginStage{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center}
+.login-box {
+  width:94%;max-width:720px;padding:28px;border-radius:var(--radius);
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(0,0,0,0.25);box-shadow:0 20px 60px rgba(2,6,23,0.6);
+  display:grid;gap:12px;
+}
+.head {
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.title {
+  display:flex;align-items:center;gap:12px;
+}
+.dot {width:12px;height:12px;border-radius:50%;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 10px 30px rgba(143,99,255,0.06)}
+.h1 {font-size:1.05rem;color:var(--text);font-weight:800}
+.hint {color:var(--muted);font-size:0.92rem}
+.form {display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+input[type="text"], input[type="password"]{
+  flex:1;min-width:170px;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);
+  background:transparent;color:var(--text);font-size:0.96rem;
+}
+input:focus{outline:none;box-shadow:0 8px 22px rgba(0,230,207,0.06);transform:translateY(-2px)}
+.btn-primary {padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#071016;font-weight:800;cursor:pointer}
+.err{color:#ff9a9a;min-height:20px;margin-top:6px}
 
-  .error {color:#ff8b8b;margin-top:10px;min-height:20px}
+/* TERMINAL OVERLAY */
+#overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.75);visibility:hidden;opacity:0;transition:opacity .35s,visibility .35s;z-index:80}
+#overlay.visible{visibility:visible;opacity:1}
+.terminal {
+  width:92%;max-width:980px;padding:18px;border-radius:12px;background:#021018;color:var(--accent2);
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;font-size:0.95rem;line-height:1.5;border-left:4px solid rgba(0,230,207,0.06);
+  box-shadow:0 30px 80px rgba(0,0,0,0.75);
+  max-height:74vh;overflow:auto;white-space:pre-wrap;
+}
 
-  /* --- decrypt terminal overlay --- */
-  .overlay {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000000cc;visibility:hidden;opacity:0;transition:opacity .4s, visibility .4s;z-index:60}
-  .overlay.visible{visibility:visible;opacity:1}
-  .terminal {
-    width:92%;max-width:900px;background:#031014;border-radius:8px;padding:18px;color:var(--accent);box-shadow:0 30px 80px rgba(0,0,0,0.7);font-family:ui-monospace,monospace;font-size:0.95rem;line-height:1.5;white-space:pre-wrap;max-height:72vh;overflow:auto;border-left:4px solid rgba(0,230,184,0.06)
-  }
-  .line.bad{color:#ffd6d6}
-  .line.good{color:#b5ffd9}
+/* PROGRESS BAR */
+.progress-wrap{margin-top:10px;background:#031016;border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.02)}
+.progress {height:12px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden}
+.progress .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .9s cubic-bezier(.2,.9,.2,1)}
 
-  /* --- Tribute (hidden at start) --- */
-  main.tribute {display:none;min-height:100vh;padding:36px;background:
-    radial-gradient(1000px 350px at 85% 10%, rgba(0,230,184,0.02), transparent 6%),
-    linear-gradient(180deg,#f8fdfb 0%, #f1fbf8 40%);color:#0b2030}
-  .wrap{max-width:1100px;margin:0 auto}
+/* MAIN TRIBUTE */
+#main{display:none;padding:28px 0 80px}
+.header-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px}
+.hero-left{flex:1}
+.hero-title{font-size:clamp(28px,5vw,44px);font-weight:800;color:var(--accent)}
+.hero-sub{color:var(--muted);margin-top:6px}
+.hero-card{background:var(--glass);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 16px 40px rgba(2,6,23,0.3);display:flex;gap:16px;align-items:flex-start}
+.hero-info{flex:1}
+.tag{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),#b0ffd7);color:#042021;font-weight:700;font-size:0.92rem}
 
-  /* header */
-  header.top {
-    display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:18px;
-  }
-  .brand{font-weight:900;color:#3b2b5c;font-size:1.15rem}
-  .meta-badge{background:linear-gradient(90deg,#ffd27a,#ffc8e6);padding:.35rem .6rem;border-radius:999px;color:#321228;font-weight:700}
+.controls{display:flex;gap:10px;align-items:center}
 
-  /* hero card - system UI */
-  .system-card{display:flex;gap:22px;background:linear-gradient(180deg,#ffffff,#fffdfd);padding:24px;border-radius:14px;box-shadow:0 18px 46px rgba(20,18,24,0.06)}
-  .avatar {width:170px;height:170px;border-radius:12px;object-fit:cover;border:6px solid rgba(59,43,88,0.06);box-shadow:0 18px 40px rgba(59,43,88,0.06)}
-  .hero-content h2{color:#3b2b5c;font-size:1.7rem;margin-bottom:6px}
-  .hero-content .subtitle{color:#60606a;margin-bottom:10px}
-  .hero-content p.lead{color:#333;max-width:720px}
+/* SECTION CARDS */
+.section {margin-top:22px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(16px);transition:opacity .8s ease, transform .8s ease}
+.section.visible{opacity:1;transform:none}
+.section h3{color:var(--accent);margin-bottom:8px}
+.section p{color:var(--text);line-height:1.65;margin-bottom:8px}
+.muted{color:var(--muted)}
 
-  /* code-like sections */
-  .fs-block{margin-top:20px}
-  .fs-title{font-family:ui-monospace,monospace;color:#0b3a33;background:#eafff3aa;padding:8px;border-radius:6px;margin-bottom:10px;border-left:4px solid rgba(0,230,184,0.12);font-weight:700}
-  pre.code {
-    background:#071018;padding:14px;border-radius:10px;color:#aef7e0;border-left:4px solid rgba(0,230,184,0.06);box-shadow:0 10px 30px rgba(0,0,0,0.06)
-  }
-  pre.code .comment{color:#7ea99b}
-  .muted{color:#5c6b6a;font-size:0.95rem}
+/* EXTRA PANELS */
+.panel {display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.panel .box{flex:1;min-width:180px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fffdfd);color:#372036}
 
-  /* grid for modules */
-  .modules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}
-  .module {background:#fff;padding:12px;border-radius:10px;box-shadow:0 14px 36px rgba(20,18,24,0.04);min-height:96px;border:1px solid rgba(10,8,10,0.02)}
-  .module h4{color:#2c1540;margin-bottom:8px}
-  .module p{color:#4a3a49;font-size:0.95rem}
+/* SECRET MODAL */
+.modal {position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,10,0.7);visibility:hidden;opacity:0;transition:opacity .25s,visibility .25s;z-index:90}
+.modal.visible{visibility:visible;opacity:1}
+.modal .card{width:92%;max-width:680px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#0b1a1a,#072525);color:var(--accent2);font-family:ui-monospace,monospace}
 
-  /* final note */
-  .final {margin-top:26px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#fff7fb,#fffdfd);border:1px solid rgba(127,79,168,0.06)}
-  .final p{color:#2f2430}
+/* FOOTER */
+footer{margin-top:28px;color:var(--muted);text-align:center;padding-bottom:36px}
 
-  /* footer */
-  footer{margin-top:34px;text-align:center;color:#6b5a63;padding-bottom:36px}
-
-  /* responsive */
-  @media(max-width:1000px){.modules{grid-template-columns:repeat(2,1fr)}.system-card{flex-direction:column;align-items:center;text-align:center}.avatar{margin-bottom:8px}}
-  @media(max-width:560px){.modules{grid-template-columns:1fr}.wrap{padding:0 12px}}
+/* responsive */
+@media (max-width:980px){.header-hero{flex-direction:column}.controls{justify-content:flex-start}}
+@media (max-width:560px){.hero-card{flex-direction:column}.panel .box{min-width:100%}}
+/* accessibility focus */
+:focus{outline: 2px dashed rgba(143,99,255,0.12);outline-offset:6px}
 </style>
 </head>
 <body>
-
-<!-- LOGIN STAGE -->
-<section class="stage" id="loginStage" aria-label="Access Terminal">
-  <div class="card" role="dialog" aria-labelledby="terminalTitle">
-    <h1 id="terminalTitle">ACCESS TERMINAL — Project_Vivian (Confidential)</h1>
-    <p class="lead">Authenticate to mount the personal runtime. Username and password are both <strong>vivian</strong> (decorative gate).</p>
-
-    <div class="inputs" role="form" aria-label="Login form">
-      <input id="user" type="text" placeholder="username" aria-label="username" />
-      <input id="pass" type="password" placeholder="password" aria-label="password" />
+  <nav class="container" aria-label="Primary">
+    <div class="brand">Project_Vivian</div>
+    <div class="nav-actions">
+      <button id="navLogin" title="Back to login">Login</button>
+      <button id="navDownload" title="Download confession" style="display:none">Download</button>
+      <button id="navSecret" title="Reveal secret" style="display:none">Reveal Secret</button>
     </div>
+  </nav>
 
-    <div style="margin-top:12px">
-      <button class="primary" id="enterBtn">CONNECT</button>
-    </div>
-
-    <div class="hint">Hint: sometimes the dev name equals the node name 😉</div>
-    <div class="error" id="err"></div>
-  </div>
-</section>
-
-<!-- DECRYPT / TERMINAL -->
-<div class="overlay" id="overlay" aria-hidden="true">
-  <div class="terminal" id="terminal" role="status" aria-live="polite"></div>
-</div>
-
-<!-- TRIBUTE: Vivian OS -->
-<main class="tribute" id="tribute" aria-hidden="true">
-  <div class="wrap">
-
-    <!-- header -->
-    <header class="top" role="banner">
-      <div class="brand">Project_Vivian — System Console</div>
-      <div class="meta-badge">University of Eldoret • 3rd Year • IT</div>
-    </header>
-
-    <!-- hero card -->
-    <section class="system-card" aria-labelledby="vivianTitle">
-
-      <div class="hero-content">
-        <h2 id="vivianTitle">Vivian — Runtime v3.0</h2>
-        <div class="subtitle">Third-Year Information Technology — University of Eldoret</div>
-        <p class="lead">
-          This environment documents the modules, logs, and runtime characteristics of <strong>Vivian</strong>.
-          Think of it as a lightweight OS: stable, low-latency, and optimised for collaboration.
-        </p>
-
-        <div class="modules" role="list" aria-label="qualities modules">
-          <div class="module" role="listitem" tabindex="0">
-            <h4>intelligence.js</h4>
-            <p>High throughput for complex problem-solving. Efficient algorithms, low branch misprediction.</p>
-          </div>
-          <div class="module" role="listitem" tabindex="0">
-            <h4>consistency.service</h4>
-            <p>Fault-tolerant scheduler — meets deadlines, maintains state across lab sessions.</p>
-          </div>
-          <div class="module" role="listitem" tabindex="0">
-            <h4>humility.daemon</h4>
-            <p>Runs quietly in background. Logs more than it broadcasts — valuable for team health.</p>
-          </div>
-          <div class="module" role="listitem" tabindex="0">
-            <h4>impact.api</h4>
-            <p>Exposes intuitive endpoints: support(), inspire(), guide() — high adoption by peers.</p>
+  <!-- LOGIN -->
+  <main id="loginStage" class="container" role="main" aria-labelledby="loginTitle">
+    <div class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <div class="head">
+        <div class="title">
+          <div class="dot" aria-hidden="true"></div>
+          <div>
+            <div class="h1" id="loginTitle">ACCESS TERMINAL — Project_Vivian</div>
+            <div class="hint">A private, respectful tribute. Authorized user: <strong>vivian</strong></div>
           </div>
         </div>
+        <div class="controls">
+          <div class="tag" aria-hidden="true">Private • Respectful</div>
+        </div>
       </div>
-    </section>
 
-    <!-- system_overview.js -->
-    <section class="fs-block" aria-labelledby="overview">
-      <div class="fs-title" id="overview">/system_overview.js</div>
-      <pre class="code">
-<span class="comment">// snapshot: Node representing Vivian's academic runtime</span>
-const Vivian = {
-  id: "vivian.uoe.it.yr3",
-  runtime: "interactive",
-  uptime: "steady",
-  traits: ["low-latency-thinker","high-throughput-collaborator","graceful-degrader"],
-  interfaces: ["helpdesk()", "pairProgram()", "debugWithCalm()"]
-};
+      <div class="form" role="form" aria-label="Login fields">
+        <input id="user" type="text" placeholder="username" autocomplete="off" aria-label="username">
+        <input id="pass" type="password" placeholder="password" autocomplete="off" aria-label="password">
+        <button class="btn-primary" id="enterBtn" aria-label="Connect">CONNECT</button>
+      </div>
+      <div class="err" id="err" role="alert" aria-live="polite"></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:0.95rem">Hint: the gateway is decorative — username & password are the same.</div>
+    </div>
+  </main>
 
-console.log("Process initialized → admirationTracker.start()");
-      </pre>
-      <div class="muted" style="margin-top:10px">Note: Interfaces are friendly APIs used in lab sessions and group projects.</div>
-    </section>
-
-    <!-- modules/qualities.js (more technical wording) -->
-    <section class="fs-block" aria-labelledby="qualities">
-      <div class="fs-title" id="qualities">/modules/qualities.js</div>
-      <pre class="code">
-/* modules loaded at boot */
-loadModule("intelligence.js");    // JIT-compiled problem solving
-loadModule("consistency.service"); // persistent daemon, low jitter
-loadModule("humility.daemon");     // background process, minimal logs
-loadModule("impact.api");          // RESTful endpoints for encouragement
-
-// metrics:
-metrics.latency = "very low";
-metrics.mean_time_to_help = "short";
-metrics.throughput_of_inspiration = "high";
-      </pre>
-    </section>
-
-    <!-- core_memory.txt -->
-    <section class="fs-block" aria-labelledby="coremem">
-      <div class="fs-title" id="coremem">/core_memory.txt</div>
-      <pre class="code">
-[LOG] 2025-05-01 14:22 — lab-42 (University of Eldoret)
-event: encounter()
-signal: calm_focus = true
-observer: "ezra"
-action: admiration.exe → spawned as background thread
-note: memory footprint of admiration increases with every helpful debug session.
-      </pre>
-      <div class="muted" style="margin-top:8px">This log is an intentionally poetic system record — private and respectful.</div>
-    </section>
-
-    <!-- final_message.sh -->
-    <section class="fs-block" aria-labelledby="final">
-      <div class="fs-title" id="final">/scripts/final_message.sh</div>
-      <pre class="code">
-#!/bin/sh
-# compile a quiet compliment, push to heart/main (no PR required)
-
-echo "Compiling admiration..."
-gcc -O2 -march=native -o admiration admiration.c
-echo "Running test suite → all green ✔"
-git add admiration
-git commit -m "chore: graceful appreciation"
-git push origin main
-
-# Deploy note:
-# not a confession. just a respectful deploy to the 'inspiration' namespace.
-      </pre>
-    </section>
-
-    <!-- small poetic final note -->
-    <section class="final" aria-labelledby="closing">
-      <h3 id="closing" style="margin-bottom:8px;color:#2d1736">final_words</h3>
-      <p>
-        This is a technical diary: small code metaphors that translate to sincere respect.
-        Vivian, your presence is a reliable process — low overhead, high impact. I document this quietly, as a developer documents an elegant function: to remember, to learn, and to be inspired.
-      </p>
-    </section>
-
-    <footer>
-      <div class="muted">Project_Vivian • Confidential • By Ezra</div>
-    </footer>
-
+  <!-- OVERLAY / TERMINAL -->
+  <div id="overlay" aria-hidden="true">
+    <div class="terminal" id="terminal" role="status" aria-live="polite" tabindex="0"></div>
   </div>
-</main>
+
+  <!-- MAIN TRIBUTE -->
+  <main id="main" aria-hidden="true">
+    <div class="container">
+      <div class="header-hero">
+        <div class="hero-left">
+          <div class="hero-title">Vivian — Profile & Private Note</div>
+          <div class="hero-sub muted">Third-year • Information Technology • University of Eldoret</div>
+
+          <div class="hero-card" style="margin-top:14px">
+            <div class="hero-info">
+              <p style="font-weight:700;color:#182031">Professional Snapshot</p>
+              <p class="muted">A reliable, thoughtful student who balances skill with empathy. Respected by peers for clarity and approachability. Steady under pressure and generous with knowledge.</p>
+            </div>
+            <div style="min-width:220px">
+              <div style="font-weight:700;margin-bottom:8px;color:var(--muted)">Quick facts</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="background:linear-gradient(90deg,var(--accent),var(--accent2));color:#031015;padding:8px;border-radius:8px;font-weight:700">3rd Year • IT</div>
+                <div style="background:#0b1a1a;padding:8px;border-radius:8px;color:var(--muted)">Team player • Calm leader</div>
+                <div style="background:#0b1a1a;padding:8px;border-radius:8px;color:var(--muted)">Problem solver • Encouraging</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls" style="align-self:flex-start">
+          <button id="downloadBtn" style="display:none" class="nav-actions">Download Note</button>
+          <button id="revealBtn" style="display:none" class="nav-actions">Reveal Secret</button>
+          <button id="lockBtn" style="display:none" class="nav-actions">Lock</button>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <section id="overview" class="section">
+        <h3>Overview</h3>
+        <p>Vivian combines technical ability with emotional intelligence. She keeps a steady pace through coursework and group projects, always making time for peers and offering clear guidance when asked.</p>
+        <p class="muted">A presence that makes the environment calmer and more productive.</p>
+      </section>
+
+      <section id="influence" class="section">
+        <h3>Influence & Leadership</h3>
+        <p>She lifts teams by example: clear explanations, patient mentorship, and humility. She leads not by asserting dominance, but by shaping a constructive atmosphere where everyone can learn.</p>
+        <div class="panel">
+          <div class="box">
+            <strong>Mentorship</strong>
+            <p style="color:#2e2030">Explains concepts clearly; helps others without taking credit.</p>
+          </div>
+          <div class="box">
+            <strong>Reliability</strong>
+            <p style="color:#2e2030">Delivers on commitments and helps keep groups on track.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="debug" class="section">
+        <h3>Calm Under Pressure</h3>
+        <p>Deadlines often strain teams; Vivian remains composed. Watching her work through a problem is a lesson in patience and structure. That steadiness has a ripple effect — stress reduces, productivity rises.</p>
+        <p class="muted">A natural problem-solver with strong emotional calibration.</p>
+      </section>
+
+      <section id="projects" class="section">
+        <h3>Projects & Labs</h3>
+        <p>She has contributed to several class projects and lab modules with clarity and initiative. Her code and documentation reflect care for maintainability and collaboration.</p>
+        <div class="panel">
+          <div class="box"><strong>Mini Portfolio</strong><p style="color:#2e2030">Web prototypes, database basics, collaborative tools</p></div>
+          <div class="box"><strong>Team Roles</strong><p style="color:#2e2030">Coordinator • Debug partner • Peer reviewer</p></div>
+        </div>
+      </section>
+
+      <section id="memory" class="section">
+        <h3>Core Memory (Private)</h3>
+        <p>Some impressions are private by nature — quietly stored and cherished. Since meeting in the lab, there have been small moments that matter: a helpful explanation, a reassuring comment, thoughtful feedback. These became part of a private appreciation I carry quietly.</p>
+        <p class="muted">This section is intentionally discreet — meant to be read by the intended node only.</p>
+      </section>
+
+      <section id="confess" class="section">
+        <h3>Confession — (Gentle & Honest)</h3>
+        <p>
+          I respect you professionally, and that respect has become something softer. I admire how you manage pressure, how you teach without judgement, and how you make others feel capable. I don’t want to make things awkward or impose — I only want to be honest: I like you more than a simple admiration.
+        </p>
+        <p>Not a demand, not a drama — a calm note of truth. If this changes anything, I will respect your space. If it doesn’t, I will keep appreciating quietly.</p>
+        <p class="muted">— Ezra</p>
+
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button id="secretShow" class="nav-actions">Reveal Private Note</button>
+          <button id="downloadNote" class="nav-actions">Download Private Note</button>
+          <button id="backLogin" class="nav-actions">Back to Login</button>
+        </div>
+      </section>
+
+      <footer>
+        © 2025 • Private Tribute — Maintained by a quiet admirer
+      </footer>
+    </div>
+  </main>
+<!-- SECRET MODAL -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="card" role="dialog" aria-modal="true" aria-label="Private note">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-weight:800;color:var(--accent2)">Private Note — Vivian</div>
+      <button id="closeModal" style="background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:8px;cursor:pointer;color:var(--muted)">Close</button>
+    </div>
+    <pre id="privateText" style="white-space:pre-wrap;color:var(--accent2);font-family:ui-monospace,monospace;min-height:180px;"></pre>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button id="downloadPrivate" class="nav-actions">Download</button>
+      <button id="lockPrivate" class="nav-actions">Close & Lock</button>
+    </div>
+  </div>
+</div>
 
 <script>
-/* ---------- login & decrypt sequence ---------- */
+/* ---------- Animated Typing Private Note ---------- */
+const modal = document.getElementById('modal');
+const privateText = document.getElementById('privateText');
+const closeModal = document.getElementById('closeModal');
+const downloadPrivate = document.getElementById('downloadPrivate');
+const lockPrivate = document.getElementById('lockPrivate');
+
+const noteLines = [
+  "Hey Vivian, 💌",
+  "",
+  "I wanted to share this quietly, straight from the heart. I admire you — your calm presence, your wisdom, and the way you make even the busiest study sessions feel lighter.",
+  "",
+  "You’ve grown on me in ways I didn’t expect. I like you more than I realized, and I hope this doesn’t make things awkward. I don’t want to pressure you or change the beautiful friendship we already have.",
+  "",
+  "If you ever want to talk, I’ll be here — ready to listen, to laugh, or just share a moment. If not, I’ll keep this to myself, quietly cherishing the respect and admiration I have for you.",
+  "",
+  "Always,",
+  "— Ezra 🌿"
+];
+
+// function to type lines sequentially
+function typePrivateNote(lines, i = 0) {
+  if (i >= lines.length) return;
+  const line = document.createElement('div');
+  privateText.appendChild(line);
+  let k = 0;
+  function tick() {
+    if (k <= lines[i].length) {
+      line.textContent = lines[i].substring(0, k) + (k % 2 ? "💖" : "");
+      k++;
+      setTimeout(tick, 25 + Math.random()*35);
+      privateText.scrollTop = privateText.scrollHeight;
+    } else {
+      setTimeout(() => typePrivateNote(lines, i + 1), 180);
+    }
+  }
+  tick();
+}
+
+// Show modal with typing effect
+function revealPrivateNote() {
+  privateText.innerHTML = ''; // clear previous
+  modal.classList.add('visible');
+  modal.removeAttribute('aria-hidden');
+  typePrivateNote(noteLines);
+}
+
+closeModal.addEventListener('click', ()=> {
+  modal.classList.remove('visible');
+  modal.setAttribute('aria-hidden','true');
+});
+
+lockPrivate.addEventListener('click', ()=> {
+  modal.classList.remove('visible');
+  modal.setAttribute('aria-hidden','true');
+  alert('Private note locked.');
+});
+
+downloadPrivate.addEventListener('click', ()=> {
+  const text = noteLines.join("\n");
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'vivian_private_note.txt'; document.body.appendChild(a); a.click();
+  setTimeout(()=> { URL.revokeObjectURL(url); a.remove(); }, 600);
+});
+
+// Trigger: replace your previous secretShow button event
+document.getElementById('secretShow').addEventListener('click', revealPrivateNote);
+
+/* ---------- Helpers & State ---------- */
 const enterBtn = document.getElementById('enterBtn');
-const userIn = document.getElementById('user');
-const passIn = document.getElementById('pass');
-const err = document.getElementById('err');
+const userEl = document.getElementById('user');
+const passEl = document.getElementById('pass');
+const errEl = document.getElementById('err');
 const overlay = document.getElementById('overlay');
 const terminal = document.getElementById('terminal');
 const loginStage = document.getElementById('loginStage');
-const tribute = document.getElementById('tribute');
+const main = document.getElementById('main');
+const navDownload = document.getElementById('navDownload');
+const navSecret = document.getElementById('navSecret');
+const navLogin = document.getElementById('navLogin');
+const revealBtn = document.getElementById('revealBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const lockBtn = document.getElementById('lockBtn');
+const secretShow = document.getElementById('secretShow');
+const downloadNote = document.getElementById('downloadNote');
+let attempts = 0;
 
-function showError(text){
-  err.textContent = text;
-  setTimeout(()=> err.textContent = '', 2400);
-}
-
-function typeTerminal(lines, idx = 0){
-  if(idx >= lines.length) return Promise.resolve();
-  return new Promise(resolve => {
-    const line = lines[idx];
-    const el = document.createElement('div');
-    el.className = 'line';
-    terminal.appendChild(el);
+/* ---------- Typing terminal simulation ---------- */
+function typeLines(lines, i = 0){
+  return new Promise(resolve=>{
+    if(i >= lines.length) { resolve(); return; }
+    const line = lines[i];
+    const div = document.createElement('div');
+    div.className = 'line';
+    terminal.appendChild(div);
     let k = 0;
-    (function t(){
+    (function tick(){
       if(k <= line.length){
-        el.textContent = line.substring(0,k);
+        div.textContent = line.substring(0,k);
         k++;
-        setTimeout(t, 12 + Math.random()*22);
+        setTimeout(tick, 8 + Math.random()*18);
       } else {
-        // small color tweak
-        if(line.toLowerCase().includes('access granted')) el.classList.add('good');
-        else if(line.toLowerCase().includes('decrypting') || line.toLowerCase().includes('error')) el.classList.add('bad');
+        if(line.toLowerCase().includes('access granted')) div.classList.add('good');
+        if(line.toLowerCase().includes('decrypt')) div.classList.add('bad');
         terminal.scrollTop = terminal.scrollHeight;
-        setTimeout(()=> {
-          typeTerminal(lines, idx+1).then(resolve);
-        }, 160);
+        setTimeout(()=> typeLines(lines, i+1).then(resolve), 160);
       }
     })();
   });
 }
 
+/* ---------- Login flow ---------- */
+function showError(msg){
+  errEl.textContent = msg;
+  setTimeout(()=> { if(errEl.textContent === msg) errEl.textContent = ''; }, 2600);
+}
+
 async function successFlow(){
-  // hide login card
   loginStage.style.display = 'none';
-
-  // show overlay terminal
   overlay.classList.add('visible');
-  terminal.textContent = '';
+  terminal.innerHTML = '';
   const seq = [
-    "[boot] initiating encrypted channel...",
+    "[boot] initializing secure channel...",
     "resolving node: vivian.uoe.it...",
-    "establishing secure RPC sessions...",
-    "fetching modules → intelligence, consistency, humility, impact",
-    "decrypting personal runtime [██████░░░░░░] 41%",
-    "decrypting personal runtime [███████████░] 79%",
-    "verifying integrity: signature ok",
-    "mounting filesystem → /home/vivian",
-    "ACCESS GRANTED — Welcome, Node vivian"
+    "establishing encrypted RPC sessions...",
+    "fetching profile: /private/vivian_profile",
+    "decrypting private entries [██████░░░░░░] 47%",
+    "decrypting private entries [███████████░] 83%",
+    "verifying signature: OK",
+    "mounting filesystem: /home/vivian",
+    "ACCESS GRANTED — WELCOME, NODE: VIVIAN"
   ];
-  await typeTerminal(seq);
+  await typeLines(seq);
 
-  // brief pause then reveal tribute
-  setTimeout(()=> {
+  // show progress bar effect
+  const wrap = document.createElement('div');
+  wrap.className = 'progress-wrap';
+  wrap.innerHTML = `<div style="color:var(--muted);margin-bottom:8px">Applying final security checks...</div><div class="progress"><div class="bar" id="bar"></div></div>`;
+  terminal.appendChild(wrap);
+
+  // animate bar
+  const bar = document.getElementById('bar');
+  setTimeout(()=> bar.style.width = '48%', 80);
+  setTimeout(()=> bar.style.width = '84%', 700);
+  setTimeout(()=> bar.style.width = '100%', 1200);
+
+  setTimeout(()=>{
     overlay.classList.remove('visible');
-    tribute.style.display = 'block';
-    tribute.removeAttribute('aria-hidden');
-    window.scrollTo({top:0,behavior:'smooth'});
-  }, 700);
+    main.style.display = 'block';
+    main.removeAttribute('aria-hidden');
+    navDownload.style.display = 'inline-block';
+    navSecret.style.display = 'inline-block';
+    revealBtn.style.display = 'inline-block';
+    downloadBtn.style.display = 'inline-block';
+    lockBtn.style.display = 'inline-block';
+    // reveal sections sequentially
+    document.querySelectorAll('.section').forEach((el,i)=> setTimeout(()=> el.classList.add('visible'), 180 * i));
+  }, 1700);
 }
 
 enterBtn.addEventListener('click', ()=>{
-  const u = (userIn.value || '').trim().toLowerCase();
-  const p = (passIn.value || '').trim().toLowerCase();
-  if(!u || !p){ showError('fill both fields'); return; }
-  if(u === 'vivian' && p === 'vivian'){ successFlow(); }
-  else { showError('ACCESS DENIED — invalid credentials'); }
+  const u = (userEl.value || '').trim().toLowerCase();
+  const p = (passEl.value || '').trim().toLowerCase();
+  if(!u || !p){ showError('Please fill both fields'); return; }
+  attempts++;
+  if(u === 'vivian' && p === 'vivian'){
+    successFlow();
+  } else {
+    if(attempts >= 4){
+      showError('Too many attempts — gateway locked briefly.');
+      enterBtn.disabled = true;
+      setTimeout(()=> { enterBtn.disabled = false; attempts = 0; }, 6000);
+    } else {
+      showError('ACCESS DENIED — Invalid credentials');
+    }
+  }
 });
 
-[userIn, passIn].forEach(i => i.addEventListener('keyup', e => { if(e.key === 'Enter') enterBtn.click(); }));
+// Enter key support
+[userEl, passEl].forEach(i => i.addEventListener('keyup', e => { if(e.key === 'Enter') enterBtn.click(); }));
 
-// accessibility: focus username
-userIn.focus();
+/* ---------- Reveal private note modal ---------- */
+secretShow.addEventListener('click', ()=> {
+  modal.classList.add('visible');
+  modal.removeAttribute('aria-hidden');
+});
+closeModal.addEventListener('click', ()=> {
+  modal.classList.remove('visible');
+  modal.setAttribute('aria-hidden','true');
+});
+lockPrivate.addEventListener('click', ()=> { modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true'); alert('Private note locked.'); });
 
+/* ---------- Download private note ---------- */
+function downloadText(filename, text){
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+  setTimeout(()=> { URL.revokeObjectURL(url); a.remove(); }, 600);
+}
+downloadPrivate.addEventListener('click', ()=> {
+  const text = document.getElementById('privateText').innerText;
+  downloadText('vivian_private_note.txt', text);
+});
+downloadNote.addEventListener('click', ()=> {
+  const note = buildPrivateNote();
+  downloadText('vivian_confession.txt', note);
+});
+navDownload.addEventListener('click', ()=> {
+  const note = buildPrivateNote();
+  downloadText('vivian_confession.txt', note);
+});
+
+/* ---------- Build enhanced private note content ---------- */
+function buildPrivateNote() {
+  return `🌿 Private Note — Vivian 🌿
+
+Hey Vivian 💌,
+
+I wanted to share this quietly, from the heart. I truly admire you — your calm, your competence, and the way you make study sessions feel lighter and more enjoyable.
+
+You’ve grown on me in ways I didn’t expect. I like you more than I realized 💛. I don’t want to pressure you or change our friendship; I only want to be honest.
+
+If you ever feel like talking, I’ll be here — ready to listen, laugh, or just share a moment together. If not, I’ll keep this to myself, quietly cherishing my respect and admiration for you 🌸.
+
+Always,
+— Ezra 🌿
+`;
+}
+
+
+
+/* ---------- Back to login / lock ---------- */
+document.getElementById('backLogin').addEventListener('click', ()=>{
+  main.style.display = 'none';
+  loginStage.style.display = 'block';
+  navDownload.style.display = 'none';
+  navSecret.style.display = 'none';
+  revealBtn.style.display = 'none';
+  downloadBtn.style.display = 'none';
+  lockBtn.style.display = 'none';
+  // clear login fields
+  userEl.value=''; passEl.value=''; userEl.focus();
+  // hide modal if open
+  modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true');
+});
+
+// top nav login button
+navLogin.addEventListener('click', ()=> {
+  main.style.display = 'none';
+  loginStage.style.display = 'block';
+  modal.classList.remove('visible'); modal.setAttribute('aria-hidden','true');
+  navDownload.style.display = 'none';
+  navSecret.style.display = 'none';
+  revealBtn.style.display = 'none';
+  downloadBtn.style.display = 'none';
+  lockBtn.style.display = 'none';
+  userEl.focus();
+});
+
+/* ---------- Reveal button shows the private modal with a little flourish ---------- */
+revealBtn.addEventListener('click', ()=>{
+  modal.classList.add('visible');
+  modal.removeAttribute('aria-hidden');
+});
+
+/* ---------- Download direct button (same) ---------- */
+downloadBtn.addEventListener('click', ()=> {
+  const note = buildPrivateNote();
+  downloadText('vivian_confession.txt', note);
+});
+
+/* ---------- Lock simulation: hides main and shows locked message ---------- */
+lockBtn.addEventListener('click', ()=>{
+  main.style.display = 'none';
+  loginStage.style.display = 'block';
+  alert('Session locked. Return to login to continue.');
+});
+
+/* ---------- Accessibility: focus username by default ---------- */
+userEl.focus();
+
+/* ---------- Small Easter egg in source (only you will see) ---------- */
+/*
+  === EASTER EGG ===
+  If you open the page source, you'll find a small line:
+  "// k1j-SECRET: ezra-loves-vivian-keep-it-private"
+  You can change or remove it as you wish.
+*/
 </script>
 </body>
 </html>
